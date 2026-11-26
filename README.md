@@ -19,6 +19,10 @@ The dashboard shows Open-Meteo's US AQI values and pollutant concentrations in Î
 
 **AI transparency:** The deployed app does not currently call a generative AI service. Daily plan suggestions are rule-based and grounded in AQI and forecast data. OpenAI Codex assisted with development and documentation.
 
+## Quality checks
+
+Run `npm test` with Node.js 20 or later. The dependency-free test suite checks US AQI band boundaries, safe handling of invalid readings, and selection of forecast windows. GitHub Actions runs the same suite for pushes and pull requests.
+
 ## Run locally
 
 Open index.html in a modern browser. Location, map tiles, and live API requests work best from an HTTPS page or local web server. No build step is required.
