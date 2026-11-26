@@ -21,7 +21,7 @@ The dashboard shows Open-Meteo's US AQI values and pollutant concentrations in Î
 
 ## Quality checks
 
-Run `npm test` with Node.js 20 or later. The dependency-free test suite checks US AQI band boundaries, safe handling of invalid readings, and selection of forecast windows. GitHub Actions runs the same suite for pushes and pull requests.
+Run `npm test` with Node.js 20 or later. The dependency-free test suite checks US AQI band boundaries, invalid readings, forecast selection, Daily Plan recommendations across profiles and thresholds, and safe chart input handling. GitHub Actions runs the same suite for pushes and pull requests.
 
 ## Run locally
 
