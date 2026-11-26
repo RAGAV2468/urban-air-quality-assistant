@@ -1,0 +1,9 @@
+{
+  "name": "airwise-urban-air-quality-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependency-free tests for Airwise AQI guidance logic",
+  "scripts": { "test": "node --test" },
+  "engines": { "node": ">=20" }
+}
+
