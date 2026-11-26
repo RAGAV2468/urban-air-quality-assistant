@@ -46,6 +46,53 @@
     return best;
   }
 
-  return { validAqi, band, tipFor, bestForecast };
+  function chartValues(hourly) {
+    const values = Array.isArray(hourly && hourly.us_aqi) ? hourly.us_aqi : [];
+    return values.slice(0, 25).map(validAqi).filter((value) => value !== null);
+  }
+
+  function buildPlan(currentAqi, profile, hourly, currentTime, label) {
+    const n = validAqi(currentAqi);
+    if (n === null) return { intro: "Waiting for a valid air quality reading.", cards: [] };
+    const safeProfile = ["general", "sensitive", "active"].includes(profile) ? profile : "general";
+    const forecast = bestForecast(hourly, currentTime, n) || { value: n, index: 0, time: null };
+    const lower = forecast.value < n - 5;
+    const when = forecast.time ? forecast.time.slice(11, 16) : "";
+    const sensitive = safeProfile === "sensitive";
+    const active = safeProfile === "active";
+    let outdoorTitle, outdoorBody, outdoorWhy;
+    if (n > 150 || (sensitive || active) && n > 100) {
+      outdoorTitle = "Move strenuous activity indoors";
+      outdoorBody = lower ? `Keep outdoor time brief. The forecast’s lowest point is around ${when} local time (AQI ${Math.round(forecast.value)}); check again before planning outside.` : "Keep outdoor time brief and choose an indoor activity while the forecast remains elevated.";
+      outdoorWhy = `the current estimate is ${n} US AQI${sensitive ? ", and this plan adds extra caution for sensitive groups." : "."}`;
+    } else if (lower) {
+      outdoorTitle = "Use the cleaner forecast window";
+      outdoorBody = `If you need to be outside, consider around ${when} local time, when the forecast is lower at about AQI ${Math.round(forecast.value)}. Recheck conditions before heading out.`;
+      outdoorWhy = `the current estimate is ${n} US AQI and the forecast varies through the day.`;
+    } else {
+      outdoorTitle = "Keep your usual pace";
+      outdoorBody = `The current estimate is ${n} US AQI. Follow local guidance and take breaks if you notice symptoms.`;
+      outdoorWhy = "the forecast does not show a clearly cleaner upcoming hour.";
+    }
+    const elevated = n > 100;
+    const indoor = elevated
+      ? ["Keep indoor air cleaner", "Keep windows closed while outdoor air is elevated. If available, use a HEPA purifier or recirculating ventilation and avoid adding smoke indoors.", "outdoor pollution is currently elevated at the selected city location."]
+      : ["Ventilate when it suits", "When outdoor air is comfortable, briefly air out rooms. Avoid indoor smoke and keep cooking ventilation on.", `the current estimate is ${n} US AQI; conditions can change, so check again later.`];
+    const high = n > 150;
+    const travel = high
+      ? ["Reduce time near busy roads", "Combine errands or use enclosed transit or a shared ride when practical. Avoid a long outdoor walk or ride during elevated conditions."]
+      : ["Choose a lower-emission trip", "For a trip, consider transit, sharing a ride, or combining errands. For short walks, choose a route away from heavy traffic when possible."];
+    const place = typeof label === "string" && label.trim() ? label.trim() : "your selected location";
+    return {
+      intro: `A ${sensitive ? "more cautious" : active ? "movement-focused" : "practical"} plan for ${place}, based on the current US AQI and local hourly forecast.`,
+      cards: [
+        { icon: "◷", label: "OUTDOOR ROUTINE", title: outdoorTitle, body: outdoorBody, why: outdoorWhy },
+        { icon: "⌂", label: "AT HOME", title: indoor[0], body: indoor[1], why: indoor[2] },
+        { icon: "↗", label: "SUSTAINABLE SWAP", title: travel[0], body: travel[1], why: "fewer vehicle trips can reduce emissions, while route choices can also reduce time near traffic." }
+      ]
+    };
+  }
+
+  return { validAqi, band, tipFor, bestForecast, chartValues, buildPlan };
 });
 
