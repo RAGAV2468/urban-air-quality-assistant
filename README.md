@@ -18,7 +18,13 @@ Open `index.html` in a modern browser. Location and live API requests work best 
 
 Air-quality and geocoding data come from [Open-Meteo](https://open-meteo.com/). The dashboard displays the provider's US AQI value and categories, alongside pollutant concentrations in μg/m³. Forecast values are estimates; local sensor coverage and conditions can vary. Health guidance is general information, not medical advice.
 
-## Publish
+## Live demo
 
-This project is intentionally small and dependency-free. Create a **public** GitHub repository, add the files in this folder, and enable GitHub Pages (Settings → Pages → deploy from the main branch). Include the public repository link and a demo video link in the challenge platform submission.
+Try the deployed app: https://ragav2468.github.io/urban-air-quality-assistant/
+
+## Source repository
+
+Public GitHub repository: https://github.com/RAGAV2468/urban-air-quality-assistant
+
+The repository is intentionally small and dependency-free (under 10 MB). For the challenge submission, include this repository and a demo video hosted as an unlisted YouTube video or an accessible Drive link.
 
